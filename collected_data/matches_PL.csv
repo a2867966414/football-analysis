@@ -1,0 +1,39 @@
+match_id,competition,season,match_date,home_team,away_team,home_score,away_score,result
+538064,PL,2025,2026-02-27,Wolverhampton Wanderers FC,Aston Villa FC,2,0,2
+538055,PL,2025,2026-02-28,AFC Bournemouth,Sunderland AFC,1,1,1
+538058,PL,2025,2026-02-28,Burnley FC,Brentford FC,3,4,0
+538060,PL,2025,2026-02-28,Liverpool FC,West Ham United FC,5,2,2
+538063,PL,2025,2026-02-28,Newcastle United FC,Everton FC,2,3,0
+538061,PL,2025,2026-02-28,Leeds United FC,Manchester City FC,0,1,0
+538056,PL,2025,2026-03-01,Brighton & Hove Albion FC,Nottingham Forest FC,2,1,2
+538059,PL,2025,2026-03-01,Fulham FC,Tottenham Hotspur FC,2,1,2
+538062,PL,2025,2026-03-01,Manchester United FC,Crystal Palace FC,2,1,2
+538057,PL,2025,2026-03-01,Arsenal FC,Chelsea FC,2,1,2
+538065,PL,2025,2026-03-03,AFC Bournemouth,Brentford FC,0,0,1
+538068,PL,2025,2026-03-03,Everton FC,Burnley FC,2,0,2
+538070,PL,2025,2026-03-03,Leeds United FC,Sunderland AFC,0,1,0
+538074,PL,2025,2026-03-03,Wolverhampton Wanderers FC,Liverpool FC,2,1,2
+538066,PL,2025,2026-03-04,Aston Villa FC,Chelsea FC,1,4,0
+538067,PL,2025,2026-03-04,Brighton & Hove Albion FC,Arsenal FC,0,1,0
+538069,PL,2025,2026-03-04,Fulham FC,West Ham United FC,0,1,0
+538071,PL,2025,2026-03-04,Manchester City FC,Nottingham Forest FC,2,2,1
+538072,PL,2025,2026-03-04,Newcastle United FC,Manchester United FC,2,1,2
+538073,PL,2025,2026-03-05,Tottenham Hotspur FC,Crystal Palace FC,1,3,0
+538075,PL,2025,2026-03-14,Sunderland AFC,Brighton & Hove Albion FC,0,1,0
+538079,PL,2025,2026-03-14,Burnley FC,AFC Bournemouth,0,0,1
+538077,PL,2025,2026-03-14,Arsenal FC,Everton FC,2,0,2
+538080,PL,2025,2026-03-14,Chelsea FC,Newcastle United FC,0,1,0
+538084,PL,2025,2026-03-14,West Ham United FC,Manchester City FC,1,1,1
+538076,PL,2025,2026-03-15,Crystal Palace FC,Leeds United FC,0,0,1
+538082,PL,2025,2026-03-15,Manchester United FC,Aston Villa FC,3,1,2
+538083,PL,2025,2026-03-15,Nottingham Forest FC,Fulham FC,0,0,1
+538081,PL,2025,2026-03-15,Liverpool FC,Tottenham Hotspur FC,1,1,1
+538078,PL,2025,2026-03-16,Brentford FC,Wolverhampton Wanderers FC,2,2,1
+538085,PL,2025,2026-03-20,AFC Bournemouth,Manchester United FC,2,2,1
+538087,PL,2025,2026-03-21,Brighton & Hove Albion FC,Liverpool FC,2,1,2
+538089,PL,2025,2026-03-21,Fulham FC,Burnley FC,3,1,2
+538088,PL,2025,2026-03-21,Everton FC,Chelsea FC,3,0,2
+538090,PL,2025,2026-03-21,Leeds United FC,Brentford FC,0,0,1
+538092,PL,2025,2026-03-22,Newcastle United FC,Sunderland AFC,1,2,0
+538086,PL,2025,2026-03-22,Aston Villa FC,West Ham United FC,2,0,2
+538093,PL,2025,2026-03-22,Tottenham Hotspur FC,Nottingham Forest FC,0,3,0

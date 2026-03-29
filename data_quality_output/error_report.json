@@ -1,0 +1,5 @@
+{
+  "error": "'gbk' codec can't encode character '\\u2705' in position 0: illegal multibyte sequence",
+  "execution_time": "2026-03-29 21:38:57",
+  "status": "failed"
+}

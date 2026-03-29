@@ -1,0 +1,29 @@
+{
+  "id": "ep-2026-03-29-001",
+  "timestamp": "2026-03-29T00:05:00Z",
+  "skill": "web-search-exa",
+  "task_type": "skill_installation",
+  "situation": "安装 Web Search by Exa 技能，应用之前学习的速率限制处理模式",
+  "solution": "等待5秒让可能的速率限制重置，然后使用 clawhub install web-search-exa 命令安装",
+  "outcome": "success",
+  "root_cause": "N/A（安装过程顺利，模式应用有效）",
+  "lesson": "验证了速率限制处理模式的有效性，成功应用模式避免了安装失败",
+  "related_patterns": ["pat-2026-03-28-001"],
+  "user_feedback": {
+    "rating": 10,
+    "comments": "成功安装Web搜索技能"
+  },
+  "skill_insights": {
+    "web_search_exa": {
+      "description": "神经网络网页搜索技能，提供语义理解搜索、内容提取、公司和人员研究、代码搜索等功能",
+      "key_features": ["语义搜索（非关键词）", "内容提取", "公司研究", "代码搜索", "深度研究"],
+      "applications": ["网页搜索", "研究", "内容分析", "代码示例查找", "市场研究"]
+    }
+  },
+  "pattern_validation": {
+    "pattern_applied": "pat-2026-03-28-001",
+    "effectiveness": "high",
+    "confidence_increase": 0.01,
+    "validation_note": "成功避免速率限制问题，安装过程顺利"
+  }
+}

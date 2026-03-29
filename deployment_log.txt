@@ -1,0 +1,10 @@
+[2026-03-29 23:36:52] Python版本: OK - Python 3.8.6
+[2026-03-29 23:36:52] 磁盘空间: OK - 可用空间: 13GB
+[2026-03-29 23:36:52] 目录检查 football-analysis: OK - 存在
+[2026-03-29 23:36:52] 目录检查 football-analysis/web_app: OK - 存在
+[2026-03-29 23:36:52] 创建备份: OK - 备份了3个关键文件
+[2026-03-29 23:36:52] 创建部署目录: OK - 主目录: C:/football_analysis_system
+[2026-03-29 23:36:53] 复制文件: OK - 复制了7个文件/目录
+[2026-03-29 23:36:53] 创建配置: OK - 配置文件: C:/football_analysis_system\config\server_config.json
+[2026-03-29 23:36:53] 创建脚本: OK - 创建了3个启动和管理脚本
+[2026-03-29 23:36:53] 创建报告: OK - 部署报告: C:/football_analysis_system\deployment_report.json

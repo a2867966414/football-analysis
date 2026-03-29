@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "skills": {
+    "self-improving-agent-skill": {
+      "version": "0.2.0",
+      "installedAt": 1774711563335
+    },
+    "frontend-design-pro": {
+      "version": "1.0.0",
+      "installedAt": 1774712581769
+    },
+    "web-search-exa": {
+      "version": "2.0.0",
+      "installedAt": 1774713902537
+    },
+    "bear-notes": {
+      "version": "1.0.0",
+      "installedAt": 1774726683338
+    }
+  }
+}

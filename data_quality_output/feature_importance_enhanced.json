@@ -1,0 +1,152 @@
+[
+  {
+    "feature_index": 23,
+    "importance": 0.09068038299968505,
+    "rank": 1
+  },
+  {
+    "feature_index": 19,
+    "importance": 0.07969064675700131,
+    "rank": 2
+  },
+  {
+    "feature_index": 25,
+    "importance": 0.07939621899546458,
+    "rank": 3
+  },
+  {
+    "feature_index": 21,
+    "importance": 0.07931901922690456,
+    "rank": 4
+  },
+  {
+    "feature_index": 16,
+    "importance": 0.07928964908384775,
+    "rank": 5
+  },
+  {
+    "feature_index": 18,
+    "importance": 0.07902562026037518,
+    "rank": 6
+  },
+  {
+    "feature_index": 15,
+    "importance": 0.07685089696802265,
+    "rank": 7
+  },
+  {
+    "feature_index": 26,
+    "importance": 0.07613646764376332,
+    "rank": 8
+  },
+  {
+    "feature_index": 27,
+    "importance": 0.07507529238707195,
+    "rank": 9
+  },
+  {
+    "feature_index": 24,
+    "importance": 0.07189417045685914,
+    "rank": 10
+  },
+  {
+    "feature_index": 20,
+    "importance": 0.07180117130904698,
+    "rank": 11
+  },
+  {
+    "feature_index": 17,
+    "importance": 0.071082413857721,
+    "rank": 12
+  },
+  {
+    "feature_index": 22,
+    "importance": 0.06975805005423671,
+    "rank": 13
+  },
+  {
+    "feature_index": 0,
+    "importance": 0.0,
+    "rank": 30
+  },
+  {
+    "feature_index": 1,
+    "importance": 0.0,
+    "rank": 19
+  },
+  {
+    "feature_index": 2,
+    "importance": 0.0,
+    "rank": 18
+  },
+  {
+    "feature_index": 3,
+    "importance": 0.0,
+    "rank": 14
+  },
+  {
+    "feature_index": 4,
+    "importance": 0.0,
+    "rank": 16
+  },
+  {
+    "feature_index": 5,
+    "importance": 0.0,
+    "rank": 15
+  },
+  {
+    "feature_index": 6,
+    "importance": 0.0,
+    "rank": 21
+  },
+  {
+    "feature_index": 7,
+    "importance": 0.0,
+    "rank": 20
+  },
+  {
+    "feature_index": 8,
+    "importance": 0.0,
+    "rank": 23
+  },
+  {
+    "feature_index": 9,
+    "importance": 0.0,
+    "rank": 24
+  },
+  {
+    "feature_index": 10,
+    "importance": 0.0,
+    "rank": 25
+  },
+  {
+    "feature_index": 11,
+    "importance": 0.0,
+    "rank": 26
+  },
+  {
+    "feature_index": 12,
+    "importance": 0.0,
+    "rank": 27
+  },
+  {
+    "feature_index": 13,
+    "importance": 0.0,
+    "rank": 28
+  },
+  {
+    "feature_index": 14,
+    "importance": 0.0,
+    "rank": 22
+  },
+  {
+    "feature_index": 28,
+    "importance": 0.0,
+    "rank": 29
+  },
+  {
+    "feature_index": 29,
+    "importance": 0.0,
+    "rank": 17
+  }
+]

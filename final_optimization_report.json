@@ -1,0 +1,10 @@
+{
+  "project": "\u968f\u673a\u68ee\u6797\u6a21\u578b\u81ea\u52a8\u5316\u4f18\u5316",
+  "execution_time": "2026-03-29 19:07:20",
+  "total_duration_seconds": 61.2245717048645,
+  "data_summary": {
+    "train_samples": 142,
+    "test_samples": 36,
+    "features": 18,
+    "train_class_distribution": {
+      

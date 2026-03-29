@@ -1,0 +1,18 @@
+{
+  "method": "random_search",
+  "best_params": {
+    "bootstrap": true,
+    "max_depth": 30,
+    "max_features": "sqrt",
+    "min_samples_leaf": 8,
+    "min_samples_split": 8,
+    "n_estimators": 171
+  },
+  "best_cv_score": 0.4432624113475177,
+  "test_accuracy": 0.4722222222222222,
+  "tuning_time": 71.0578145980835,
+  "n_iter": 20,
+  "cv_folds": 3,
+  "improvement_vs_baseline": 0.02777777777777779,
+  "tested_at": "2026-03-29 18:42:02"
+}

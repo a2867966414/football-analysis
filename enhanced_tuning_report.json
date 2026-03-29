@@ -1,0 +1,11 @@
+{
+  "project": "\u968f\u673a\u68ee\u6797\u6a21\u578b\u589e\u5f3a\u7248\u8c03\u4f18",
+  "start_time": "2026-03-29 18:57:23",
+  "tuning_method": "enhanced_random_search_100_iterations",
+  "data_summary": {
+    "total_samples": 178,
+    "train_samples": 142,
+    "test_samples": 36,
+    "features": 18,
+    "train_class_distribution": {
+      

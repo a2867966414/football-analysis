@@ -1,0 +1,74 @@
+{
+  "project": "\u6df1\u5ea6\u7279\u5f81\u53c2\u6570\u8c03\u4f18\u4f18\u5316",
+  "execution_time": "2026-03-29 21:57:44",
+  "data_summary": {
+    "train_samples": 142,
+    "test_samples": 36,
+    "total_features": 40,
+    "feature_breakdown": {
+      "statistical": 4,
+      "interaction": 3,
+      "polynomial": 3
+    }
+  },
+  "baseline_results": {
+    "accuracy": 0.4166666666666667,
+    "training_time": 0.37227392196655273,
+    "model": "RandomForestClassifier(n_estimators=100)"
+  },
+  "optimization_results": {
+    "random_search": {
+      "method": "random_search_50_iterations",
+      "best_params": {
+        "bootstrap": true,
+        "max_depth": 20,
+        "max_features": "sqrt",
+        "min_samples_leaf": 2,
+        "min_samples_split": 3,
+        "n_estimators": 269
+      },
+      "best_cv_score": 0.47177895981087475,
+      "test_accuracy": 0.4444444444444444,
+      "tuning_time": 151.84530067443848,
+      "improvement_vs_baseline": 0.027777777777777735,
+      "n_iter": 50,
+      "cv_folds": 3
+    },
+    "grid_search": {
+      "method": "grid_search",
+      "best_params": {
+        "bootstrap": true,
+        "max_depth": 20,
+        "max_features": "sqrt",
+        "min_samples_leaf": 2,
+        "min_samples_split": 2,
+        "n_estimators": 269
+      },
+      "best_cv_score": 0.47177895981087475,
+      "test_accuracy": 0.4444444444444444,
+      "tuning_time": 77.65498948097229,
+      "improvement_vs_baseline": 0.027777777777777735
+    }
+  },
+  "performance_comparison": {
+    "baseline_accuracy": 0.4166666666666667,
+    "best_optimized_accuracy": 0.4444444444444444,
+    "total_improvement": 0.027777777777777735
+  },
+  "conclusions": [
+    "\u57fa\u7ebf\u51c6\u786e\u7387: 0.4167",
+    "\u4f18\u5316\u540e\u6700\u4f73\u51c6\u786e\u7387: 0.4444",
+    "\u603b\u63d0\u5347: +0.0278",
+    "\u53c2\u6570\u8c03\u4f18\u9a8c\u8bc1\u4e86\u5728\u6df1\u5ea6\u7279\u5f81\u4e0a\u7684\u4f18\u5316\u6548\u679c"
+  ],
+  "recommendations": [
+    "\u4e0b\u4e00\u6b65: \u6536\u96c6\u66f4\u591a\u5386\u53f2\u6570\u636e\u6269\u5c55\u6837\u672c\u91cf",
+    "\u4e0b\u4e00\u6b65: \u5c1d\u8bd5\u66f4\u590d\u6742\u7684\u7279\u5f81\u5de5\u7a0b\u65b9\u6cd5",
+    "\u4e0b\u4e00\u6b65: \u6d4b\u8bd5\u5176\u4ed6\u6a21\u578b\u7b97\u6cd5 (XGBoost, LightGBM)",
+    "\u4e0b\u4e00\u6b65: \u5b9e\u65bd\u6a21\u578b\u96c6\u6210\u65b9\u6cd5"
+  ],
+  "generated_files": [
+    "optimized_rf_model.pkl",
+    "optimized_feature_importance.json"
+  ]
+}

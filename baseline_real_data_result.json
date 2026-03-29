@@ -1,0 +1,22 @@
+{
+  "model": "baseline_random_forest",
+  "parameters": {
+    "n_estimators": 100,
+    "random_state": 42
+  },
+  "train_accuracy": 1.0,
+  "test_accuracy": 0.4444444444444444,
+  "training_time": 0.42042994499206543,
+  "overfitting": 0.5555555555555556,
+  "tested_at": "2026-03-29 18:40:51",
+  "data_info": {
+    "train_samples": 142,
+    "test_samples": 36,
+    "features": 18,
+    "class_distribution": {
+      "0": 45,
+      "1": 33,
+      "2": 64
+    }
+  }
+}

@@ -1,0 +1,17 @@
+match_id,competition,season,match_date,home_team,away_team,home_score,away_score,result
+552069,CL,2025,2026-03-10,Galatasaray SK,Liverpool FC,1,0,2
+552071,CL,2025,2026-03-10,Atalanta BC,FC Bayern München,1,6,0
+552072,CL,2025,2026-03-10,Newcastle United FC,FC Barcelona,1,1,1
+552073,CL,2025,2026-03-10,Club Atlético de Madrid,Tottenham Hotspur FC,5,2,2
+552075,CL,2025,2026-03-11,Bayer 04 Leverkusen,Arsenal FC,1,1,1
+552068,CL,2025,2026-03-11,Paris Saint-Germain FC,Chelsea FC,5,2,2
+552070,CL,2025,2026-03-11,Real Madrid CF,Manchester City FC,3,0,2
+552074,CL,2025,2026-03-11,FK Bodø/Glimt,Sporting Clube de Portugal,3,0,2
+552082,CL,2025,2026-03-17,Sporting Clube de Portugal,FK Bodø/Glimt,5,0,2
+552076,CL,2025,2026-03-17,Chelsea FC,Paris Saint-Germain FC,0,3,0
+552078,CL,2025,2026-03-17,Manchester City FC,Real Madrid CF,1,2,0
+552083,CL,2025,2026-03-17,Arsenal FC,Bayer 04 Leverkusen,2,0,2
+552080,CL,2025,2026-03-18,FC Barcelona,Newcastle United FC,7,2,2
+552077,CL,2025,2026-03-18,Liverpool FC,Galatasaray SK,4,0,2
+552079,CL,2025,2026-03-18,FC Bayern München,Atalanta BC,4,1,2
+552081,CL,2025,2026-03-18,Tottenham Hotspur FC,Club Atlético de Madrid,3,2,2

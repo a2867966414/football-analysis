@@ -1,0 +1,34 @@
+{
+  "patterns": {
+    "pat-2026-03-28-001": {
+      "id": "pat-2026-03-28-001",
+      "name": "等待速率限制重置",
+      "source": "implementation_review",
+      "confidence": 0.97,
+      "applications": 4,
+      "created": "2026-03-28",
+      "last_applied": "2026-03-29",
+      "category": "workflow",
+      "pattern": "遇到API速率限制时，等待3-5秒后重试",
+      "problem": "ClawHub API有每分钟180次的速率限制，达到限制后操作会失败",
+      "solution": "当出现'Rate limit exceeded'错误时，等待3-5秒让限制重置，然后重试操作",
+      "quality_rules": ["检查错误信息是否包含'Rate limit exceeded'", "等待时间根据重置时间动态调整"],
+      "target_skills": ["clawhub"]
+    },
+    "pat-2026-03-28-002": {
+      "id": "pat-2026-03-28-002",
+      "name": "跨平台命令适配",
+      "source": "implementation_review",
+      "confidence": 0.85,
+      "applications": 1,
+      "created": "2026-03-28",
+      "last_applied": "2026-03-28",
+      "category": "system_operations",
+      "pattern": "在执行系统命令前检查操作系统类型",
+      "problem": "Windows和Linux的命令语法不同，直接使用Linux语法在Windows上会失败",
+      "solution": "在执行mkdir等系统命令前，先检查操作系统，Windows使用PowerShell语法，Linux/macOS使用Unix语法",
+      "quality_rules": ["检查操作系统类型", "使用相应的命令语法", "提供错误处理"],
+      "target_skills": ["所有涉及系统操作的技能"]
+    }
+  }
+}

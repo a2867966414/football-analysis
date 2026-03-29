@@ -1,0 +1,18 @@
+{
+  "collected_at": "2026-03-29 18:37:43",
+  "total_matches": 89,
+  "competitions": [
+    "PL",
+    "CL",
+    "FL1"
+  ],
+  "date_range": {
+    "from": "2026-02-27",
+    "to": "2026-03-29"
+  },
+  "class_distribution": {
+    "away_win": 28,
+    "draw": 21,
+    "home_win": 40
+  }
+}

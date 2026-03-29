@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>足球分析系统 - 2026世界杯</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #2ecc71;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .status-badge.offline {
+            background: #e74c3c;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: 1.5rem;
+        }
+        
+        .chart-container {
+            height: 300px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .team-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin: 2px;
+        }
+        
+        .probability-bar {
+            height: 20px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .probability-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #3498db);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        
+        .refresh-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .refresh-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        .system-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .system-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚽ 足球分析系统 2026</h1>
+            <p class="subtitle">专业足球数据分析与预测平台</p>
+            <div class="status-badge" id="systemStatus">系统状态: 检查中...</div>
+            <p style="margin-top: 15px; color: #666;">
+                最后更新: <span id="lastUpdate">--:--:--</span> | 
+                世界杯倒计时: <span id="worldCupCountdown">-- 天</span>
+            </p>
+        </header>
+        
+        <div class="dashboard">
+            <!-- 世界杯分析卡片 -->
+            <div class="card">
+                <h2>🏆 2026世界杯分析</h2>
+                <div id="worldCupChart" class="chart-container"></div>
+                <div id="worldCupData" style="margin-top: 20px;">
+                    <p>正在加载世界杯分析数据...</p>
+                </div>
+            </div>
+            
+            <!-- 实时积分榜卡片 -->
+            <div class="card">
+                <h2>📊 英超实时积分榜</h2>
+                <div id="standingsChart" class="chart-container"></div>
+                <button class="refresh-btn" onclick="loadStandings()">
+                    🔄 刷新积分榜
+                </button>
+            </div>
+            
+            <!-- 今日比赛卡片 -->
+            <div class="card">
+                <h2>⚽ 今日比赛</h2>
+                <div id="matchesToday" style="min-height: 300px;">
+                    <p>正在加载今日比赛数据...</p>
+                </div>
+                <button class="refresh-btn" onclick="loadTodayMatches()">
+                    🔄 刷新比赛
+                </button>
+            </div>
+            
+            <!-- 系统状态卡片 -->
+            <div class="card">
+                <h2>🔧 系统状态</h2>
+                <div id="systemStats">
+                    <p>API连接: <span id="apiStatus">检查中...</span></p>
+                    <p>数据更新时间: <span id="dataUpdateTime">--:--:--</span></p>
+                    <p>请求次数: <span id="requestCount">0</span></p>
+                    <div class="probability-bar">
+                        <div id="systemHealthBar" class="probability-fill" style="width: 0%"></div>
+                    </div>
+                    <p>系统健康度: <span id="systemHealth">0%</span></p>
+                </div>
+                <button class="refresh-btn" onclick="checkSystemStatus()">
+                    🔍 检查系统状态
+                </button>
+            </div>
+        </div>
+        
+        <div class="system-info">
+            <div>
+                <strong>访问地址:</strong> http://localhost:5000
+            </div>
+            <div>
+                <strong>API状态:</strong> http://localhost:5000/api/status
+            </div>
+            <div>
+                <strong>版本:</strong> v2.0-unified
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2026 足球分析系统 | 专业足球数据分析平台</p>
+            <p>数据来源: Football-Data.org | 更新时间: 每5分钟自动更新</p>
+        </footer>
+    </div>
+
+    <script>
+        // 系统状态变量
+        let requestCount = 0;
+        let lastUpdateTime = null;
+        
+        // 初始化函数
+        document.addEventListener('DOMContentLoaded', function() {
+            updateWorldCupCountdown();
+            checkSystemStatus();
+            loadWorldCupAnalysis();
+            loadStandings();
+            loadTodayMatches();
+            
+            // 每30秒更新一次数据
+            setInterval(updateData, 30000);
+        });
+        
+        // 更新世界杯倒计时
+        function updateWorldCupCountdown() {
+            const worldCupDate = new Date('2026-06-08');
+            const today = new Date();
+            const diffTime = worldCupDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('worldCupCountdown').textContent = diffDays + ' 天';
+        }
+        
+        // 检查系统状态
+        async function checkSystemStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                
+                const statusElement = document.getElementById('systemStatus');
+                const apiStatusElement = document.getElementById('apiStatus');
+                
+                if (data.status === 'online') {
+                    statusElement.textContent = '系统状态: 在线 🟢';
+                    statusElement.className = 'status-badge';
+                    apiStatusElement.textContent = '正常 🟢';
+                    updateSystemHealth(100);
+                } else {
+                    statusElement.textContent = '系统状态: 离线 🔴';
+                    statusElement.className = 'status-badge offline';
+                    apiStatusElement.textContent = '异常 🔴';
+                    updateSystemHealth(30);
+                }
+                
+                updateLastUpdateTime();
+                requestCount++;
+                document.getElementById('requestCount').textContent = requestCount;
+                
+            } catch (error) {
+                document.getElementById('systemStatus').textContent = '系统状态: 连接失败 🔴';
+                document.getElementById('systemStatus').className = 'status-badge offline';
+                document.getElementById('apiStatus').textContent = '失败 🔴';
+                updateSystemHealth(0);
+            }
+        }
+        
+        // 更新系统健康度
+        function updateSystemHealth(percentage) {
+            const bar = document.getElementById('systemHealthBar');
+            const text = document.getElementById('systemHealth');
+            bar.style.width = percentage + '%';
+            text.textContent = percentage + '%';
+        }
+        
+        // 更新最后更新时间
+        function updateLastUpdateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('zh-CN');
+            document.getElementById('lastUpdate').textContent = timeString;
+            document.getElementById('dataUpdateTime').textContent = timeString;
+            lastUpdateTime = now;
+        }
+        
+        // 加载世界杯分析
+        async function loadWorldCupAnalysis() {
+            try {
+                const response = await fetch('/api/world_cup/analysis');
+                const data = await response.json();
+                
+                // 更新显示
+                const container = document.getElementById('worldCupData');
+                let html = '<h3>夺冠概率分析</h3>';
+                
+                data.champion_prediction.top_contenders.forEach(team => {
+                    html += `
+                        <div style="margin: 10px 0;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>${team.team}</span>
+                                <span>${team.probability}%</span>
+                            </div>
+                            <div class="probability-bar">
+                                <div class="probability-fill" style="width: ${team.probability}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '<h3 style="margin-top: 20px;">黑马球队</h3>';
+                data.dark_horses.forEach(horse => {
+                    html += `<div class="team-badge">${horse.team}</div>`;
+                });
+                
+                container.innerHTML = html;
+                
+                // 绘制图表
+                renderWorldCupChart(data);
+                
+            } catch (error) {
+                document.getElementById('worldCupData').innerHTML = 
+                    '<p style="color: #e74c3c;">加载世界杯数据失败</p>';
+            }
+        }
+        
+        // 渲染世界杯图表
+        function renderWorldCupChart(data) {
+            const chart = echarts.init(document.getElementById('worldCupChart'));
+            
+            const option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c}%'
+                },
+                legend: {
+                    top: '5%',
+                    left: 'center'
+                },
+                series: [
+                    {
+                        name: '夺冠概率',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 20,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: data.champion_prediction.top_contenders.map(team => ({
+                            value: team.probability,
+                            name: team.team
+                        }))
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+        }
+        
+        // 加载积分榜
+        async function loadStandings() {
+            try {
+                const response = await fetch('/api/standings/PL');
+                const data = await response.json();
+                
+                // 绘制积分榜图表
+                renderStandingsChart(data);
+                
+            } catch (error) {
+                // 使用模拟数据
+                renderStandingsChart(getMockStandings());
+            }
+        }
+        
+        // 渲染积分榜图表
+        function renderStandingsChart(data) {
+            const chart = echarts.init(document.getElementById('standingsChart'));
+            
+            // 提取数据
+            const standings = data.standings?.[0]?.table || [];
+            const teams = standings.map(item => item.team.name);
+            const points = standings.map(item => item.points);
+            
+            const option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: teams,
+                    axisLabel: {
+                        rotate: 45
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '积分'
+                },
+                series: [
+                    {
+                        name: '积分',
+                        type: 'bar',
+                        data: points,
+                        itemStyle: {
+                            color: function(params) {
+                                const colorList = [
+                                    '#5470c6', '#91cc75', '#fac858', '#ee6666',
+                                    '#73c0de', '#3ba272', '#fc8452', '#9a60b4'
+                                ];
+                                return colorList[params.dataIndex % colorList.length];
+                            }
+                        }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+        }
+        
+        // 加载今日比赛
+        async function loadTodayMatches() {
+            try {
+                const response = await fetch('/api/matches/today');
+                const data = await response.json();
+                
+                const container = document.getElementById('matchesToday');
+                
+                if (data.matches && data.matches.length > 0) {
+                    let html = '<table class="data-table">';
+                    html += '<tr><th>比赛</th><th>时间</th><th>状态</th></tr>';
+                    
+                    data.matches.slice(0, 8).forEach(match => {
+                        const matchTime = new Date(match.utcDate).toLocaleTimeString('zh-CN', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        
+                        html += `
+                            <tr>
+                                <td>${match.homeTeam.name} vs ${match.awayTeam.name}</td>
+                                <td>${matchTime}</td>
+                                <td>${match.status || '未开始'}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    html += '</table>';
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p>今日暂无比赛</p>';
+                }
+                
+            } catch (error) {
+                // 使用模拟数据
+                const container = document.getElementById('matchesToday');
+                container.innerHTML = `
+                    <table class="data-table">
+                        <tr><th>比赛</th><th>时间</th><th>状态</th></tr>
+                        <tr><td>Manchester United vs Liverpool</td><td>20:00</td><td>未开始</td></tr>
+                        <tr><td>Arsenal vs Chelsea</td><td>22:30</td><td>未开始</td></tr>
+                        <tr><td>Manchester City vs Tottenham</td><td>19:45</td><td>未开始</td></tr>
+                        <tr><td>Real Madrid vs Barcelona</td><td>21:00</td><td>未开始</td></tr>
+                    </table>
+                `;
+            }
+        }
+        
+        // 模拟积分榜数据
+        function getMockStandings() {
+            return {
+                standings: [{
+                    table: [
+                        {team: {name: 'Arsenal FC'}, points: 70},
+                        {team: {name: 'Manchester City FC'}, points: 68},
+                        {team: {name: 'Liverpool FC'}, points: 64},
+                        {team: {name: 'Manchester United FC'}, points: 60},
+                        {team: {name: 'Tottenham Hotspur FC'}, points: 57},
+                        {team: {name: 'Chelsea FC'}, points: 55},
+                        {team: {name: 'Aston Villa FC'}, points: 52},
+                        {team: {name: 'Newcastle United FC'}, points: 49}
+                    ]
+                }]
+            };
+        }
+        
+        // 更新数据
+        function updateData() {
+            updateLastUpdateTime();
+            loadStandings();
+            loadTodayMatches();
+        }
+        
+        // 窗口大小变化时重绘图表
+        window.addEventListener('resize', function() {
+            const charts = [
+                document.getElementById('worldCupChart'),
+                document.getElementById('standingsChart')
+            ];
+            
+            charts.forEach(chartElement => {
+                if (chartElement) {
+                    const chart = echarts.getInstanceByDom(chartElement);
+                    if (chart) {
+                        chart.resize();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+match_id,competition,season,match_date,home_team,away_team,home_score,away_score,result
+542620,FL1,2025,2026-02-27,RC Strasbourg Alsace,Racing Club de Lens,1,1,1
+542621,FL1,2025,2026-02-28,Stade Rennais FC 1901,Toulouse FC,1,0,2
+542614,FL1,2025,2026-02-28,AS Monaco FC,Angers SCO,2,0,2
+542613,FL1,2025,2026-02-28,Le Havre AC,Paris Saint-Germain FC,0,1,0
+542617,FL1,2025,2026-03-01,Paris FC,OGC Nice,1,0,2
+542615,FL1,2025,2026-03-01,FC Lorient,AJ Auxerre,2,2,1
+542616,FL1,2025,2026-03-01,FC Metz,Stade Brestois 29,0,1,0
+542619,FL1,2025,2026-03-01,Lille OSC,FC Nantes,1,0,2
+542618,FL1,2025,2026-03-01,Olympique de Marseille,Olympique Lyonnais,3,2,2
+542628,FL1,2025,2026-03-06,Paris Saint-Germain FC,AS Monaco FC,1,3,0
+542623,FL1,2025,2026-03-07,FC Nantes,Angers SCO,0,1,0
+542622,FL1,2025,2026-03-07,AJ Auxerre,RC Strasbourg Alsace,0,0,1
+542624,FL1,2025,2026-03-07,Toulouse FC,Olympique de Marseille,0,1,0
+542629,FL1,2025,2026-03-08,Racing Club de Lens,FC Metz,3,0,2
+542625,FL1,2025,2026-03-08,OGC Nice,Stade Rennais FC 1901,0,4,0
+542627,FL1,2025,2026-03-08,Lille OSC,FC Lorient,1,1,1
+542630,FL1,2025,2026-03-08,Stade Brestois 29,Le Havre AC,2,0,2
+542626,FL1,2025,2026-03-08,Olympique Lyonnais,Paris FC,1,1,1
+542635,FL1,2025,2026-03-13,Olympique de Marseille,AJ Auxerre,1,0,2
+542633,FL1,2025,2026-03-14,FC Lorient,Racing Club de Lens,2,1,2
+542638,FL1,2025,2026-03-14,Angers SCO,OGC Nice,0,2,0
+542632,FL1,2025,2026-03-14,AS Monaco FC,Stade Brestois 29,2,0,2
+542637,FL1,2025,2026-03-15,RC Strasbourg Alsace,Paris FC,0,0,1
+542631,FL1,2025,2026-03-15,Le Havre AC,Olympique Lyonnais,0,0,1
+542634,FL1,2025,2026-03-15,FC Metz,Toulouse FC,3,4,0
+542639,FL1,2025,2026-03-15,Stade Rennais FC 1901,Lille OSC,1,2,0
+542647,FL1,2025,2026-03-20,Racing Club de Lens,Angers SCO,5,1,2
+542643,FL1,2025,2026-03-21,Toulouse FC,FC Lorient,1,0,2
+542640,FL1,2025,2026-03-21,AJ Auxerre,Stade Brestois 29,3,0,2
+542644,FL1,2025,2026-03-21,OGC Nice,Paris Saint-Germain FC,0,4,0
+542645,FL1,2025,2026-03-22,Olympique Lyonnais,AS Monaco FC,1,2,0
+542642,FL1,2025,2026-03-22,Paris FC,Le Havre AC,3,2,2
+542646,FL1,2025,2026-03-22,Olympique de Marseille,Lille OSC,1,2,0
+542648,FL1,2025,2026-03-22,Stade Rennais FC 1901,FC Metz,0,0,1
+542641,FL1,2025,2026-03-22,FC Nantes,RC Strasbourg Alsace,2,3,0

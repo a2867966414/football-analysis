@@ -1,0 +1,24 @@
+{
+  "id": "ep-2026-03-28-001",
+  "timestamp": "2026-03-28T15:34:00Z",
+  "skill": "self-improving-agent-skill",
+  "task_type": "skill_installation_testing",
+  "situation": "安装并测试 self-improving-agent-skill 功能，过程中遇到 ClawHub API 速率限制和跨平台命令语法问题",
+  "solution": "1. 等待3秒让速率限制重置后重试安装；2. 使用 PowerShell 的正确语法创建目录；3. 成功安装技能并测试自学习功能",
+  "outcome": "success",
+  "root_cause": "1. ClawHub API 有每分钟180次的速率限制；2. Windows 和 Linux 的命令语法差异",
+  "lesson": "重要经验：API调用需要考虑速率限制，跨平台操作需要适配不同系统的命令语法",
+  "related_patterns": ["pat-2026-03-28-001", "pat-2026-03-28-002"],
+  "user_feedback": {
+    "rating": 10,
+    "comments": "同意应用技能更新，确认学习结果有效"
+  },
+  "skill_updates_applied": [
+    {
+      "skill": "clawhub",
+      "file": "SKILL.md",
+      "changes": "添加 Troubleshooting 部分，包含速率限制处理和跨平台说明",
+      "evolution_marker": "Evolution: 2026-03-28 | source: ep-2026-03-28-001 | task: skill_installation"
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "feature_count": 27,
+  "sample_count": 3,
+  "feature_stats": {
+    "fifa_ranking_diff": {
+      "mean": 5.0,
+      "std": 0.0,
+      "min": 5.0,
+      "max": 5.0,
+      "null_count": 0
+    },
+    "recent_form_diff": {
+      "mean": 0.10000000000000002,
+      "std": 1.6996749443881478e-17,
+      "min": 0.1,
+      "max": 0.1,
+      "null_count": 0
+    },
+    "home_advantage": {
+      "mean": 0.15,
+      "std": 0.0,
+      "min": 0.15,
+      "max": 0.15,
+      "null_count": 0
+    },
+    "head_to_head": {
+      "mean": 0.3,
+      "std": 0.0,
+      "min": 0.3,
+      "max": 0.3,
+      "null_count": 0
+    },
+    "attack_rating_diff": {
+      "mean": 0.05000000000000001,
+      "std": 8.498374721940739e-18,
+      "min": 0.05,
+      "max": 0.05,
+      "null_count": 0
+    },
+    "defense_rating_diff": {
+      "mean": -0.02,
+      "std": 0.0,
+      "min": -0.02,
+      "max": -0.02,
+      "null_count": 0
+    },
+    "key_player_status_diff": {
+      "mean": 0.10000000000000002,
+      "std": 1.6996749443881478e-17,
+      "min": 0.1,
+      "max": 0.1,
+      "null_count": 0
+    },
+    "injury_impact_diff": {
+      "mean": -0.05000000000000001,
+      "std": 8.498374721940739e-18,
+      "min": -0.05,
+      "max": -0.05,
+      "null_count": 0
+    },
+    "match_importance": {
+      "mean": 0.8000000000000002,
+      "std": 1.3597399555105182e-16,
+      "min": 0.8,
+      "max": 0.8,
+      "null_count": 0
+    },
+    "weather_adaptation_diff": {
+      "mean": 0.10000000000000002,
+      "std": 1.6996749443881478e-17,
+      "min": 0.1,
+      "max": 0.1,
+      "null_count": 0
+    },
+    "timezone_adjustment_diff": {
+      "mean": 0.05000000000000001,
+      "std": 8.498374721940739e-18,
+      "min": 0.05,
+      "max": 0.05,
+      "null_count": 0
+    },
+    "coach_tactics_diff": {
+      "mean": 0.20000000000000004,
+      "std": 3.3993498887762956e-17,
+      "min": 0.2,
+      "max": 0.2,
+      "null_count": 0
+    },
+    "xg_difference": {
+      "mean": 0.5,
+      "std": 0.0,
+      "min": 0.5,
+      "max": 0.5,
+      "null_count": 0
+    },
+    "possession_efficiency_diff": {
+      "mean": 0.0404038755895042,
+      "std": 0.0,
+      "min": 0.0404038755895042,
+      "max": 0.0404038755895042,
+      "null_count": 0
+    },
+    "shot_conversion_diff": {
+      "mean": 0.00020789999178794094,
+      "std": 0.0,
+      "min": 0.00020789999178794094,
+      "max": 0.00020789999178794094,
+      "null_count": 0
+    },
+    "pass_success_rate_diff": {
+      "mean": 3.0,
+      "std": 0.0,
+      "min": 3.0,
+      "max": 3.0,
+      "null_count": 0
+    },
+    "tackle_success_rate_diff": {
+      "mean": 0.03820370988360677,
+      "std": 0.0,
+      "min": 0.03820370988360677,
+      "max": 0.03820370988360677,
+      "null_count": 0
+    },
+    "corner_threat_diff": {
+      "mean": 2.0,
+      "std": 0.0,
+      "min": 2.0,
+      "max": 2.0,
+      "null_count": 0
+    },
+    "set_piece_threat_diff": {
+      "mean": 0.20000000000000004,
+      "std": 3.3993498887762956e-17,
+      "min": 0.2,
+      "max": 0.2,
+      "null_count": 0
+    },
+    "defense_organization_diff": {
+      "mean": 0.4280872292361646,
+      "std": 0.0,
+      "min": 0.4280872292361646,
+      "max": 0.4280872292361646,
+      "null_count": 0
+    },
+    "attack_variety_diff": {
+      "mean": 0.09999999999999998,
+      "std": 0.0,
+      "min": 0.09999999999999998,
+      "max": 0.09999999999999998,
+      "null_count": 0
+    },
+    "pace_control_diff": {
+      "mean": 0.09999999999999998,
+      "std": 0.0,
+      "min": 0.09999999999999998,
+      "max": 0.09999999999999998,
+      "null_count": 0
+    },
+    "market_value_ratio": {
+      "mean": 1.3333037043621254,
+      "std": 0.0,
+      "min": 1.3333037043621254,
+      "max": 1.3333037043621254,
+      "null_count": 0
+    },
+    "financial_strength_diff": {
+      "mean": 0.10000000000000009,
+      "std": 0.0,
+      "min": 0.10000000000000009,
+      "max": 0.10000000000000009,
+      "null_count": 0
+    },
+    "social_sentiment_diff": {
+      "mean": 0.09999999999999998,
+      "std": 0.0,
+      "min": 0.09999999999999998,
+      "max": 0.09999999999999998,
+      "null_count": 0
+    },
+    "expert_consensus": {
+      "mean": 0.09999999999999998,
+      "std": 0.0,
+      "min": 0.09999999999999998,
+      "max": 0.09999999999999998,
+      "null_count": 0
+    },
+    "odds_implied_prob_diff": {
+      "mean": 0.05012531328320802,
+      "std": 0.0,
+      "min": 0.05012531328320802,
+      "max": 0.05012531328320802,
+      "null_count": 0
+    }
+  },
+  "correlation_analysis": {
+    "high_correlation_pairs": [],
+    "high_correlation_count": 0
+  },
+  "created_at": "2026-03-29 18:00:02"
+}
