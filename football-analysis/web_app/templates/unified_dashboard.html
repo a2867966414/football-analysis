@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统一专业足球AI分析系统 | 对标GitHub Copilot级别</title>
+    
+    <!-- 核心框架 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    
+    <!-- 数据可视化 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <!-- 实时通信 -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #34a853;
+            --accent-color: #ea4335;
+            --warning-color: #fbbc05;
+            --dark-bg: #0d1117;
+            --card-bg: #161b22;
+            --card-border: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --sidebar-width: 280px;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* GitHub风格侧边栏 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--card-bg);
+            border-right: 1px solid var(--card-border);
+            padding: 1.5rem 1rem;
+            z-index: 1000;
+        }
+        
+        .sidebar-brand {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            padding: 0 0.5rem;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-nav-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .sidebar-nav-link:hover,
+        .sidebar-nav-link.active {
+            background: rgba(56, 139, 253, 0.15);
+            color: var(--text-primary);
+        }
+        
+        .sidebar-nav-icon {
+            width: 20px;
+            margin-right: 0.75rem;
+            text-align: center;
+        }
+        
+        /* 主内容区域 */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        
+        /* GitHub风格头部 */
+        .github-header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--card-border);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .header-search {
+            max-width: 400px;
+        }
+        
+        .header-search input {
+            background: var(--dark-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+        }
+        
+        /* 专业卡片 */
+        .pro-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+        }
+        
+        .pro-card:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .card-header {
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        /* 实时状态指示器 */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid rgba(46, 160, 67, 0.4);
+            border-radius: 2em;
+            font-size: 0.875rem;
+            color: #3fb950;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #3fb950;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* 数据网格 */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* 统计卡片 */
+        .stat-card {
+            background: linear-gradient(135deg, #1a1a1a, #252525);
+            border-radius: 6px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--card-border);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #1a73e8, #4285f4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* 实时比赛卡片 */
+        .live-match-card {
+            background: rgba(234, 67, 53, 0.05);
+            border: 1px solid rgba(234, 67, 53, 0.2);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .match-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-align: center;
+            margin: 0.5rem 0;
+        }
+        
+        /* AI预测卡片 */
+        .ai-prediction-card {
+            background: rgba(26, 115, 232, 0.05);
+            border: 1px solid rgba(26, 115, 232, 0.2);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+        
+        .prediction-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .prediction-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        
+        /* 价值机会卡片 */
+        .value-opportunity-card {
+            background: rgba(52, 168, 83, 0.05);
+            border: 1px solid rgba(52, 168, 83, 0.2);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .opportunity-badge {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2em;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* 图表容器 */
+        .chart-container {
+            height: 300px;
+            width: 100%;
+            margin: 1rem 0;
+        }
+        
+        /* 按钮样式 */
+        .btn-github {
+            background: #238636;
+            border: 1px solid rgba(240, 246, 252, 0.1);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-github:hover {
+            background: #2ea043;
+            border-color: rgba(240, 246, 252, 0.3);
+        }
+        
+        .btn-primary-github {
+            background: #1a73e8;
+        }
+        
+        .btn-primary-github:hover {
+            background: #1967d2;
+        }
+        
+        /* 标签页 */
+        .nav-tabs-github {
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .nav-tabs-github .nav-link {
+            color: var(--text-secondary);
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 6px 6px 0 0;
+        }
+        
+        .nav-tabs-github .nav-link.active {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-bottom: 2px solid #f78166;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--card-border);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 通知系统 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 1rem;
+            max-width: 350px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- GitHub风格侧边栏 -->
+    <nav class="sidebar">
+        <div class="sidebar-brand">
+            <i class="bi bi-graph-up-arrow text-primary me-2"></i>
+            足球AI分析系统
+        </div>
+        
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item">
+                <a href="#dashboard" class="sidebar-nav-link active">
+                    <span class="sidebar-nav-icon"><i class="bi bi-speedometer2"></i></span>
+                    仪表板
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#live" class="sidebar-nav-link">
+                    <span class="sidebar-nav-icon"><i class="bi bi-tv"></i></span>
+                    实时监控
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#predictions" class="sidebar-nav-link">
+                    <span class="sidebar-nav-icon"><i class="bi bi-robot"></i></span>
+                    AI预测中心
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#value" class="sidebar-nav-link">
+                    <span class="sidebar-nav-icon"><i class="bi bi-graph-up-arrow"></i></span>
+                    价值检测
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#worldcup" class="sidebar-nav-link">
+                    <span class="sidebar-nav-icon"><i class="bi bi-trophy"></i></span>
+                    世界杯2026
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#analytics" class="sidebar-nav-link">
+                    <span class="sidebar-nav-icon"><i class="bi bi-bar-chart"></i></span>
+                    深度分析
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#settings" class="sidebar-nav-link">
+                    <span class="sidebar-nav-icon"><i class="bi bi-gear"></i></span>
+                    系统设置
+                </a>
+            </li>
+        </ul>
+        
+        <div class="mt-4 pt-4 border-top border-secondary">
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                系统在线
+            </div>
+            <div class="mt-2 text-muted small">
+                用户: <span id="username">{{ username }}</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- GitHub风格头部 -->
+        <div class="github-header">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h4 mb-0">统一专业足球分析系统</h1>
+                        <p class="text-muted small mb-0">对标GitHub Copilot级别的专业AI分析平台</p>
+                    </div>
+                    
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="header-search">
+                            <input type="text" class="form-control form-control-sm" placeholder="搜索比赛、球队或分析...">
+                        </div>
+                        <button class="btn btn-github" onclick="refreshData()">
+                            <i class="bi bi-arrow-clockwise"></i> 刷新
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据统计网格 -->
+        <div class="data-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="liveMatchCount">0</div>
+                <div class="stat-label">实时比赛</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number" id="predictionAccuracy">85.2%</div>
+                <div class="stat-label">预测准确率</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number" id="valueOpportunities">0</div>
+                <div class="stat-label">价值机会</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number" id="activeUsers">1,250</div>
+                <div class="stat-label">活跃用户</div>
+            </div>
+        </div>
+
+        <!-- 主仪表板 -->
+        <div class="row">
+            <!-- 左侧：实时数据 -->
+            <div class="col-lg-8">
+                <!-- 实时比赛监控 -->
+                <div class="pro-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">
+                            <i class="bi bi-lightning-charge-fill text-warning me-2"></i>
+                            实时比赛监控
+                        </h5>
+                        <span class="badge bg-danger">LIVE</span>
+                    </div>
+                    <div id="liveMatchesContainer">
+                        <div class="text-center py-4">
+                            <div class="loading"></div>
+                            <p class="mt-3 text-muted">正在加载实时比赛数据...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI预测面板 -->
+                <div class="pro-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="bi bi-cpu-fill text-primary me-2"></i>
+                            AI智能预测
+                        </h5>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="ai-prediction-card">
+                                <h6>快速预测</h6>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control bg-dark text-white border-dark mb-2" 
+                                           id="quickHomeTeam" placeholder="主队" value="Manchester United">
+                                    <input type="text" class="form-control bg-dark text-white border-dark" 
+                                           id="quickAwayTeam" placeholder="客队" value="Liverpool">
+                                </div>
+                                <button class="btn btn-primary-github w-100" onclick="quickPredict()">
+                                    <i class="bi bi-lightning-charge me-2"></i> 快速预测
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="quickPredictionResult">
+                                <p class="text-muted small">预测结果将显示在这里</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：价值机会和系统状态 -->
+            <div class="col-lg-4">
+                <!-- 价值机会检测 -->
+                <div class="pro-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="bi bi-graph-up-arrow text-success me-2"></i>
+                            价值机会检测
+                        </h5>
+                    </div>
+                    <div id="valueOpportunitiesContainer">
+                        <div class="text-center py-4">
+                            <div class="loading"></div>
+                            <p class="mt-3 text-muted">正在扫描价值机会...</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-github w-100 mt-3" onclick="scanOpportunities()">
+                        <i class="bi bi-search me-2"></i> 重新扫描
+                    </button>
+                </div>
+
+                <!-- 系统状态 -->
+                <div class="pro-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="bi bi-activity text-info me-2"></i>
+                            系统状态
+                        </h5>
+                    </div>
+                    <div class="p-3">
+                        <div class="mb-3">
+                            <span class="text-muted">API响应时间:</span>
+                            <span class="float-end text-success" id="apiResponseTime">0.25s</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">数据更新:</span>
+                            <span class="float-end" id="dataFreshness">10秒</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">连接状态:</span>
+                            <span class="float-end text-success">稳定</span>
+                        </div>
+                        <div>
+                            <span class="text-muted">最后更新:</span>
+                            <span class="float-end" id="lastUpdateTime">--:--:--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 世界杯分析 -->
+        <div class="pro-card mt-4">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <i class="bi bi-trophy-fill text-warning me-2"></i>
+                    2026世界杯专业分析
+                </h5>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="chart-container" id="worldCupChart"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <h6>夺冠概率排名</h6>
+                        <div id="championProbabilities">
+                            <!-- 将通过JavaScript动态加载 -->
+                        </div>
+                        <button class="btn btn-github w-100 mt-3" onclick="loadWorldCupAnalysis()">
+                            <i class="bi bi-arrow-clockwise me-2"></i> 更新分析
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 标签页内容 -->
+        <div class="mt-4">
+            <ul class="nav nav-tabs nav-tabs-github" id="mainTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#tab-analytics">
+                        <i class="bi bi-bar-chart me-2"></i>数据分析
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-predictions">
+                        <i class="bi bi-robot me-2"></i>高级预测
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-reports">
+                        <i class="bi bi-file-earmark-text me-2"></i>分析报告
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="tab-content mt-3">
+                <!-- 数据分析标签页 -->
+                <div class="tab-pane fade show active" id="tab-analytics">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="pro-card">
+                                <h6>联赛趋势分析</h6>
+                                <div class="chart-container" id="leagueTrendsChart"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="pro-card">
+                                <h6>球队表现对比</h6>
+                                <div class="chart-container" id="teamComparisonChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 高级预测标签页 -->
+                <div class="tab-pane fade" id="tab-predictions">
+                    <div class="pro-card">
+                        <h5>高级AI预测引擎</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">主队</label>
+                                    <input type="text" class="form-control bg-dark text-white border-dark" 
+                                           id="advancedHomeTeam" value="Manchester United">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">客队</label>
+                                    <input type="text" class="form-control bg-dark text-white border-dark" 
+                                           id="advancedAwayTeam" value="Liverpool">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">比赛场地</label>
+                                    <select class="form-select bg-dark text-white border-dark" id="advancedVenue">
+                                        <option value="home">主场</option>
+                                        <option value="away">客场</option>
+                                        <option value="neutral">中立场地</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">联赛</label>
+                                    <select class="form-select bg-dark text-white border-dark" id="advancedLeague">
+                                        <option value="PL">英超联赛</option>
+                                        <option value="PD">西甲联赛</option>
+                                        <option value="SA">意甲联赛</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary-github w-100" onclick="runAdvancedPrediction()">
+                            <i class="bi bi-cpu me-2"></i> 运行高级预测
+                        </button>
+                        <div id="advancedPredictionResult" class="mt-3"></div>
+                    </div>
+                </div>
+                
+                <!-- 分析报告标签页 -->
+                <div class="tab-pane fade" id="tab-reports">
+                    <div class="pro-card">
+                        <h5>专业分析报告</h5>
+                        <div id="analysisReports">
+                            <div class="text-center py-4">
+                                <div class="loading"></div>
+                                <p class="mt-3 text-muted">正在生成分析报告...</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-github w-100 mt-3" onclick="generateReport()">
+                            <i class="bi bi-file-earmark-plus me-2"></i> 生成新报告
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // 全局变量
+        let socket = null;
+        let lastUpdate = new Date();
+        
+        // 初始化函数
+        document.addEventListener('DOMContentLoaded', function() {
+            initSystem();
+            loadDashboardData();
+            initCharts();
+            startAutoRefresh();
+        });
+        
+        // 初始化系统
+        async function initSystem() {
+            try {
+                // 连接WebSocket
+                socket = io();
+                
+                socket.on('connect', function() {
+                    console.log('WebSocket连接成功');
+                    showNotification('实时连接已建立', 'success');
+                });
+                
+                socket.on('system_message', function(data) {
+                    console.log('系统消息:', data);
+                });
+                
+                socket.on('live_update', function(data) {
+                    updateLiveData(data);
+                });
+                
+            } catch (error) {
+                console.error('系统初始化失败:', error);
+                showNotification('实时功能暂时不可用', 'warning');
+            }
+        }
+        
+        // 加载仪表板数据
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/unified/live/dashboard');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDashboard(data);
+                }
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                showNotification('数据加载失败', 'error');
+            }
+        }
+        
+        // 更新仪表板
+        function updateDashboard(data) {
+            // 更新实时比赛
+            updateLiveMatches(data.live_matches);
+            
+            // 更新统计数字
+            document.getElementById('liveMatchCount').textContent = data.live_matches.count;
+            document.getElementById('valueOpportunities').textContent = data.system_stats.value_opportunities;
+            document.getElementById('activeUsers').textContent = data.system_stats.active_users.toLocaleString();
+            
+            // 更新最后更新时间
+            lastUpdate = new Date();
+            document.getElementById('lastUpdateTime').textContent = 
+                lastUpdate.toLocaleTimeString();
+        }
+        
+        // 更新实时比赛
+        function updateLiveMatches(matchData) {
+            const container = document.getElementById('liveMatchesContainer');
+            
+            if (!matchData.matches || matchData.matches.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="bi bi-calendar-x text-muted" style="font-size: 2rem;"></i>
+                        <p class="mt-3 text-muted">当前没有进行中的比赛</p>
+                    </div>`;
+                return;
+            }
+            
+            let html = '';
+            matchData.matches.forEach(match => {
+                html += `
+                <div class="live-match-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1">${match.competition}</h6>
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <strong>${match.home_team}</strong><br>
+                                    <small class="text-muted">主队</small>
+                                </div>
+                                <div class="match-score">${match.score}</div>
+                                <div class="ms-3">
+                                    <strong>${match.away_team}</strong><br>
+                                    <small class="text-muted">客队</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-danger">${match.minute}'</span><br>
+                            <small class="text-muted">${match.status}</small>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // 快速预测
+        async function quickPredict() {
+            const homeTeam = document.getElementById('quickHomeTeam').value;
+            const awayTeam = document.getElementById('quickAwayTeam').value;
+            
+            if (!homeTeam || !awayTeam) {
+                showNotification('请输入球队名称', 'warning');
+                return;
+            }
+            
+            showNotification('正在运行AI预测...', 'info');
+            
+            try {
+                const response = await fetch('/api/unified/ai/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        home_team: homeTeam,
+                        away_team: awayTeam,
+                        venue: 'home'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    displayQuickPrediction(data);
+                    showNotification('预测完成', 'success');
+                }
+            } catch (error) {
+                console.error('预测失败:', error);
+                showNotification('预测失败', 'error');
+            }
+        }
+        
+        // 显示快速预测结果
+        function displayQuickPrediction(data) {
+            const prediction = data.prediction;
+            const container = document.getElementById('quickPredictionResult');
+            
+            const html = `
+                <h6>${prediction.home_team} vs ${prediction.away_team}</h6>
+                <div class="mt-2">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>主队胜</span>
+                        <span>${prediction.probabilities.home_win}%</span>
+                    </div>
+                    <div class="prediction-bar">
+                        <div class="prediction-fill bg-primary" style="width: ${prediction.probabilities.home_win}%"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>平局</span>
+                        <span>${prediction.probabilities.draw}%</span>
+                    </div>
+                    <div class="prediction-bar">
+                        <div class="prediction-fill bg-warning" style="width: ${prediction.probabilities.draw}%"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>客队胜</span>
+                        <span>${prediction.probabilities.away_win}%</span>
+                    </div>
+                    <div class="prediction-bar">
+                        <div class="prediction-fill bg-danger" style="width: ${prediction.probabilities.away_win}%"></div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="badge bg-info">推荐: ${prediction.recommendation}</span>
+                    <span class="badge bg-light text-dark ms-2">置信度: ${prediction.confidence}%</span>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+        
+        // 扫描价值机会
+        async function scanOpportunities() {
+            showNotification('正在扫描价值机会...', 'info');
+            
+            try {
+                const response = await fetch('/api/unified/value/scan');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateValueOpportunities(data);
+                    showNotification(`发现 ${data.scan_results.total_opportunities} 个价值机会`, 'success');
+                }
+            } catch (error) {
+                console.error('扫描失败:', error);
+                showNotification('扫描失败', 'error');
+            }
+        }
+        
+        // 更新价值机会
+        function updateValueOpportunities(data) {
+            const container = document.getElementById('valueOpportunitiesContainer');
+            const opportunities = data.scan_results.opportunities;
+            
+            if (opportunities.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="bi bi-search text-muted" style="font-size: 2rem;"></i>
+                        <p class="mt-3 text-muted">当前没有检测到价值机会</p>
+                    </div>`;
+                return;
+            }
+            
+            let html = '';
+            opportunities.forEach(opp => {
+                html += `
+                <div class="value-opportunity-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="mb-0">${opp.match}</h6>
+                        <span class="opportunity-badge">${opp.type}</span>
+                    </div>
+                    <p class="text-muted small mb-2">${opp.description}</p>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-success">置信度: ${Math.round(opp.confidence * 100)}%</span>
+                        <span class="text-warning">价值: ${opp.value}</span>
+                    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            document.getElementById('valueOpportunities').textContent = opportunities.length;
+        }
+        
+        // 加载世界杯分析
+        async function loadWorldCupAnalysis() {
+            showNotification('正在加载世界杯分析...', 'info');
+            
+            try {
+                const response = await fetch('/api/unified/worldcup/analysis');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateWorldCupAnalysis(data);
+                    showNotification('世界杯分析已更新', 'success');
+                }
+            } catch (error) {
+                console.error('加载失败:', error);
+                showNotification('加载失败', 'error');
+            }
+        }
+        
+        // 更新世界杯分析
+        function updateWorldCupAnalysis(data) {
+            // 更新夺冠概率
+            const container = document.getElementById('championProbabilities');
+            let html = '';
+            
+            data.champion_probabilities.forEach(team => {
+                html += `
+                <div class="mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span>${team.team}</span>
+                        <span>${team.probability}%</span>
+                    </div>
+                    <div class="prediction-bar">
+                        <div class="prediction-fill bg-warning" style="width: ${team.probability}%"></div>
+                    </div>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            
+            // 更新图表
+            updateWorldCupChart(data);
+        }
+        
+        // 初始化图表
+        function initCharts() {
+            // 世界杯图表
+            const worldCupChart = echarts.init(document.getElementById('worldCupChart'));
+            worldCupChart.setOption({
+                title: { 
+                    text: '2026世界杯夺冠概率分析',
+                    left: 'center',
+                    textStyle: { color: '#f0f6fc' }
+                },
+                tooltip: { trigger: 'item' },
+                legend: { 
+                    orient: 'vertical',
+                    left: 'left',
+                    textStyle: { color: '#8b949e' }
+                },
+                series: [{
+                    name: '夺冠概率',
+                    type: 'pie',
+                    radius

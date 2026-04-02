@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机森林足球预测系统</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2d3748;
+            --accent-color: #3182ce;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --danger-color: #e53e3e;
+            --light-color: #f7fafc;
+            --dark-color: #1a202c;
+            --border-color: #e2e8f0;
+            --card-radius: 12px;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            background: white;
+            border-radius: var(--card-radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .header h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 1.1rem;
+        }
+        
+        .model-status {
+            background: var(--light-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .status-trained {
+            background: rgba(56, 161, 105, 0.1);
+            color: var(--success-color);
+        }
+        
+        .status-not-trained {
+            background: rgba(229, 62, 62, 0.1);
+            color: var(--danger-color);
+        }
+        
+        .prediction-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+        
+        .prediction-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .prediction-result {
+            text-align: center;
+            padding: 20px;
+            border-radius: var(--card-radius);
+            margin-top: 20px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .result-home-win {
+            background: rgba(56, 161, 105, 0.1);
+            color: var(--success-color);
+            border: 2px solid var(--success-color);
+        }
+        
+        .result-draw {
+            background: rgba(214, 158, 46, 0.1);
+            color: var(--warning-color);
+            border: 2px solid var(--warning-color);
+        }
+        
+        .result-away-win {
+            background: rgba(229, 62, 62, 0.1);
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+        }
+        
+        .probability-chart {
+            height: 200px;
+            margin-top: 20px;
+        }
+        
+        .feature-slider {
+            margin-bottom: 15px;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .slider-label span {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+        
+        .slider-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .example-match {
+            cursor: pointer;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        
+        .example-match:hover {
+            background: var(--light-color);
+            border-color: var(--accent-color);
+        }
+        
+        .example-match.active {
+            background: rgba(49, 130, 206, 0.1);
+            border-color: var(--accent-color);
+        }
+        
+        .feature-importance {
+            height: 300px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 54, 93, 0.2);
+        }
+        
+        .tab-content {
+            padding: 20px 0;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #718096;
+            font-weight: 600;
+            padding: 12px 24px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--accent-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1><i class="bi bi-tree-fill"></i> 随机森林足球预测系统</h1>
+            <p>基于机器学习算法的专业足球比赛结果预测</p>
+        </div>
+        
+        <!-- 模型状态 -->
+        <div class="model-status">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5>模型状态</h5>
+                    <div id="modelStatusText">正在检查模型状态...</div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <span id="modelStatusBadge" class="status-badge status-not-trained">未训练</span>
+                    <button id="retrainBtn" class="btn btn-outline-primary btn-sm ms-2">
+                        <i class="bi bi-arrow-clockwise"></i> 重新训练
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 导航标签 -->
+        <ul class="nav nav-tabs" id="predictionTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single" type="button">
+                    <i class="bi bi-flag"></i> 单场预测
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="batch-tab" data-bs-toggle="tab" data-bs-target="#batch" type="button">
+                    <i class="bi bi-collection"></i> 批量预测
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="analysis-tab" data-bs-toggle="tab" data-bs-target="#analysis" type="button">
+                    <i class="bi bi-bar-chart"></i> 模型分析
+                </button>
+            </li>
+        </ul>
+        
+        <!-- 标签内容 -->
+        <div class="tab-content" id="predictionTabsContent">
+            <!-- 单场预测 -->
+            <div class="tab-pane fade show active" id="single" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="prediction-card">
+                            <h5><i class="bi bi-sliders"></i> 比赛特征设置</h5>
+                            <p class="text-muted mb-4">调整以下滑块设置比赛特征，然后点击预测按钮</p>
+                            
+                            <div class="row">
+                                <!-- 球队实力 -->
+                                <div class="col-md-6">
+                                    <h6 class="mt-3">球队实力</h6>
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>主队实力</span>
+                                            <span class="slider-value" id="homeStrengthValue">0.65</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="homeStrength" min="0.1" max="1.0" step="0.01" value="0.65">
+                                    </div>
+                                    
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>客队实力</span>
+                                            <span class="slider-value" id="awayStrengthValue">0.55</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="awayStrength" min="0.1" max="1.0" step="0.01" value="0.55">
+                                    </div>
+                                </div>
+                                
+                                <!-- 近期状态 -->
+                                <div class="col-md-6">
+                                    <h6 class="mt-3">近期状态</h6>
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>主队状态</span>
+                                            <span class="slider-value" id="homeFormValue">0.70</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="homeForm" min="0.1" max="1.0" step="0.01" value="0.70">
+                                    </div>
+                                    
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>客队状态</span>
+                                            <span class="slider-value" id="awayFormValue">0.60</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="awayForm" min="0.1" max="1.0" step="0.01" value="0.60">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <!-- 进攻防守 -->
+                                <div class="col-md-6">
+                                    <h6>进攻能力</h6>
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>主队进攻</span>
+                                            <span class="slider-value" id="homeAttackValue">0.65</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="homeAttack" min="0.1" max="1.0" step="0.01" value="0.65">
+                                    </div>
+                                    
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>客队进攻</span>
+                                            <span class="slider-value" id="awayAttackValue">0.55</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="awayAttack" min="0.1" max="1.0" step="0.01" value="0.55">
+                                    </div>
+                                    
+                                    <h6 class="mt-3">防守能力</h6>
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>主队防守</span>
+                                            <span class="slider-value" id="homeDefenseValue">0.60</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="homeDefense" min="0.1" max="1.0" step="0.01" value="0.60">
+                                    </div>
+                                    
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>客队防守</span>
+                                            <span class="slider-value" id="awayDefenseValue">0.50</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="awayDefense" min="0.1" max="1.0" step="0.01" value="0.50">
+                                    </div>
+                                </div>
+                                
+                                <!-- 其他因素 -->
+                                <div class="col-md-6">
+                                    <h6>其他因素</h6>
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>主场优势</span>
+                                            <span class="slider-value" id="homeAdvantageValue">0.20</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="homeAdvantage" min="0.0" max="0.5" step="0.01" value="0.20">
+                                    </div>
+                                    
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>主队伤病</span>
+                                            <span class="slider-value" id="homeInjuriesValue">0.10</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="homeInjuries" min="0.0" max="0.5" step="0.01" value="0.10">
+                                    </div>
+                                    
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>客队伤病</span>
+                                            <span class="slider-value" id="awayInjuriesValue">0.15</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="awayInjuries" min="0.0" max="0.5" step="0.01" value="0.15">
+                                    </div>
+                                    
+                                    <div class="feature-slider">
+                                        <div class="slider-label">
+                                            <span>历史交锋</span>
+                                            <span class="slider-value" id="headToHeadValue">0.55</span>
+                                        </div>
+                                        <input type="range" class="form-range" id="headToHead" min="0.1" max="1.0" step="0.01" value="0.55">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button id="predictBtn" class="btn btn-primary w-100">
+                                        <i class="bi bi-lightning-charge"></i> 开始预测
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <!-- 预测结果 -->
+                        <div class="prediction-card">
+                            <h5><i class="bi bi-graph-up"></i> 预测结果</h5>
+                            <div class="loading" id="predictionLoading">
+                                <div class="loading-spinner"></div>
+                                <p>预测中...</p>
+                            </div>
+                            
+                            <div id="predictionResult" style="display: none;">
+                                <div class="prediction-result" id="resultDisplay">
+                                    等待预测...
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <h6>概率分布</h6>
+                                    <div class="probability-chart">
+                                        <canvas id="probabilityChart"></canvas>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <h6>关键影响因素</h6>
+                                    <div id="topFeatures">
+                                        <p class="text-muted">预测后将显示关键影响因素</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 示例比赛 -->
+                        <div class="prediction-card">
+                            <h5><i class="bi bi-collection-play"></i> 示例比赛</h5>
+                            <p class="text-muted mb-3">点击加载预设的比赛特征</p>
+                            
+                            <div id="exampleMatches">
+                                <!-- 示例比赛将通过JavaScript加载 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 批量预测 -->
+            <
